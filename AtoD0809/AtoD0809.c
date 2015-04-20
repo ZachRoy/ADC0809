@@ -44,7 +44,7 @@ void Hex2Ascii(unsigned char c1,unsigned char *c2,unsigned char *c3)
 
 int main(void)
 {
-	void Setup();
+	Setup();
 	unsigned char x = 0;
 	unsigned char c2 = 0;
 	unsigned char c3 = 0;
