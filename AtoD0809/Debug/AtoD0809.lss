@@ -1,0 +1,195 @@
+
+AtoD0809.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000096  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .comment      00000030  00000000  00000000  000000ea  2**0
+                  CONTENTS, READONLY
+  2 .debug_aranges 00000038  00000000  00000000  0000011a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .debug_info   0000019d  00000000  00000000  00000152  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_abbrev 00000126  00000000  00000000  000002ef  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_line   00000101  00000000  00000000  00000415  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_frame  00000054  00000000  00000000  00000518  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_str    00000156  00000000  00000000  0000056c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_loc    00000065  00000000  00000000  000006c2  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_ranges 00000028  00000000  00000000  00000727  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	10 c0       	rjmp	.+32     	; 0x22 <__ctors_end>
+   2:	22 c0       	rjmp	.+68     	; 0x48 <__bad_interrupt>
+   4:	21 c0       	rjmp	.+66     	; 0x48 <__bad_interrupt>
+   6:	20 c0       	rjmp	.+64     	; 0x48 <__bad_interrupt>
+   8:	1f c0       	rjmp	.+62     	; 0x48 <__bad_interrupt>
+   a:	1e c0       	rjmp	.+60     	; 0x48 <__bad_interrupt>
+   c:	1d c0       	rjmp	.+58     	; 0x48 <__bad_interrupt>
+   e:	1c c0       	rjmp	.+56     	; 0x48 <__bad_interrupt>
+  10:	1b c0       	rjmp	.+54     	; 0x48 <__bad_interrupt>
+  12:	1a c0       	rjmp	.+52     	; 0x48 <__bad_interrupt>
+  14:	19 c0       	rjmp	.+50     	; 0x48 <__bad_interrupt>
+  16:	18 c0       	rjmp	.+48     	; 0x48 <__bad_interrupt>
+  18:	17 c0       	rjmp	.+46     	; 0x48 <__bad_interrupt>
+  1a:	16 c0       	rjmp	.+44     	; 0x48 <__bad_interrupt>
+  1c:	15 c0       	rjmp	.+42     	; 0x48 <__bad_interrupt>
+  1e:	14 c0       	rjmp	.+40     	; 0x48 <__bad_interrupt>
+  20:	13 c0       	rjmp	.+38     	; 0x48 <__bad_interrupt>
+
+00000022 <__ctors_end>:
+  22:	11 24       	eor	r1, r1
+  24:	1f be       	out	0x3f, r1	; 63
+  26:	cf e5       	ldi	r28, 0x5F	; 95
+  28:	d2 e0       	ldi	r29, 0x02	; 2
+  2a:	de bf       	out	0x3e, r29	; 62
+  2c:	cd bf       	out	0x3d, r28	; 61
+
+0000002e <__do_copy_data>:
+  2e:	10 e0       	ldi	r17, 0x00	; 0
+  30:	a0 e6       	ldi	r26, 0x60	; 96
+  32:	b0 e0       	ldi	r27, 0x00	; 0
+  34:	e6 e9       	ldi	r30, 0x96	; 150
+  36:	f0 e0       	ldi	r31, 0x00	; 0
+  38:	02 c0       	rjmp	.+4      	; 0x3e <__SP_H__>
+  3a:	05 90       	lpm	r0, Z+
+  3c:	0d 92       	st	X+, r0
+  3e:	a0 36       	cpi	r26, 0x60	; 96
+  40:	b1 07       	cpc	r27, r17
+  42:	d9 f7       	brne	.-10     	; 0x3a <__do_copy_data+0xc>
+  44:	02 d0       	rcall	.+4      	; 0x4a <main>
+  46:	25 c0       	rjmp	.+74     	; 0x92 <_exit>
+
+00000048 <__bad_interrupt>:
+  48:	db cf       	rjmp	.-74     	; 0x0 <__vectors>
+
+0000004a <main>:
+	void Setup();
+	unsigned char x = 0;
+	unsigned char c2 = 0;
+	unsigned char c3 = 0;
+	//PORTB=PORTB|(1<<PB1);
+	PORTB = (1<<OE)| (1<<SOC);
+  4a:	8a e0       	ldi	r24, 0x0A	; 10
+  4c:	88 bb       	out	0x18, r24	; 24
+	DDRB = DDRB | (1<<OE)| (1<<SOC)|(1<<PB0);
+  4e:	87 b3       	in	r24, 0x17	; 23
+  50:	8b 60       	ori	r24, 0x0B	; 11
+  52:	87 bb       	out	0x17, r24	; 23
+	PORTB = 0;
+  54:	18 ba       	out	0x18, r1	; 24
+	MCUCR=MCUCR|(1<<SRE);
+  56:	85 b7       	in	r24, 0x35	; 53
+  58:	80 68       	ori	r24, 0x80	; 128
+  5a:	85 bf       	out	0x35, r24	; 53
+	
+	unsigned char *ptr;
+//	unsigned char *ptr2;
+//	ptr2 = (unsigned char *)0x2000;
+	ptr = (unsigned char *)CTRL_REG;
+	(*ptr) = CTRL_WD;
+  5c:	8b e8       	ldi	r24, 0x8B	; 139
+  5e:	80 93 03 40 	sts	0x4003, r24
+	while(1){
+		PORTB = PORTB|(1<<SOC);
+		//_delay_ms(10);
+		PORTB = PORTB&(~(1<<SOC));
+	while((PINB & (1<<EOC))){
+			(*ale)  = 0x00;
+  62:	e0 e0       	ldi	r30, 0x00	; 0
+  64:	f0 ea       	ldi	r31, 0xA0	; 160
+		x = (*ptr);
+		//Hex2Ascii(x, &c2, &c3);
+		//USART_TX(c2);
+		//USART_TX(c3);
+		ptr = (unsigned char *)EXTPortA;
+		(*ptr) = ~x;
+  66:	c0 e0       	ldi	r28, 0x00	; 0
+  68:	d0 e4       	ldi	r29, 0x40	; 64
+		}
+		//_delay_ms(200);
+		PORTB = PORTB|(1<<OE);
+		ptr = (unsigned char*)EXTPortB;
+		//(*ptr2) = 0x00;
+		x = (*ptr);
+  6a:	a1 e0       	ldi	r26, 0x01	; 1
+  6c:	b0 e4       	ldi	r27, 0x40	; 64
+	
+	unsigned char *ale;
+	ale = (unsigned char*)phantom;
+	
+	while(1){
+		PORTB = PORTB|(1<<SOC);
+  6e:	c1 9a       	sbi	0x18, 1	; 24
+		//_delay_ms(10);
+		PORTB = PORTB&(~(1<<SOC));
+  70:	c1 98       	cbi	0x18, 1	; 24
+	while((PINB & (1<<EOC))){
+  72:	b2 9b       	sbis	0x16, 2	; 22
+  74:	03 c0       	rjmp	.+6      	; 0x7c <main+0x32>
+			(*ale)  = 0x00;
+  76:	10 82       	st	Z, r1
+	
+	while(1){
+		PORTB = PORTB|(1<<SOC);
+		//_delay_ms(10);
+		PORTB = PORTB&(~(1<<SOC));
+	while((PINB & (1<<EOC))){
+  78:	b2 99       	sbic	0x16, 2	; 22
+  7a:	fd cf       	rjmp	.-6      	; 0x76 <main+0x2c>
+			(*ale)  = 0x00;
+		}
+	
+	//	_delay_ms(5);
+		while(!(PINB & (1<<EOC))){
+  7c:	b2 99       	sbic	0x16, 2	; 22
+  7e:	03 c0       	rjmp	.+6      	; 0x86 <main+0x3c>
+			(*ale)  = 0x00;
+  80:	10 82       	st	Z, r1
+	while((PINB & (1<<EOC))){
+			(*ale)  = 0x00;
+		}
+	
+	//	_delay_ms(5);
+		while(!(PINB & (1<<EOC))){
+  82:	b2 9b       	sbis	0x16, 2	; 22
+  84:	fd cf       	rjmp	.-6      	; 0x80 <main+0x36>
+			(*ale)  = 0x00;
+			//_delay_ms(1);
+		}
+		//_delay_ms(200);
+		PORTB = PORTB|(1<<OE);
+  86:	c3 9a       	sbi	0x18, 3	; 24
+		x = (*ptr);
+		//Hex2Ascii(x, &c2, &c3);
+		//USART_TX(c2);
+		//USART_TX(c3);
+		ptr = (unsigned char *)EXTPortA;
+		(*ptr) = ~x;
+  88:	8c 91       	ld	r24, X
+  8a:	80 95       	com	r24
+  8c:	88 83       	st	Y, r24
+		//delay_ms(300);
+		//(*ptr2) = 0xF0;
+		
+		PORTB = PORTB&(~(1<<OE));
+  8e:	c3 98       	cbi	0x18, 3	; 24
+	
+		//while(1)
+		//;
+	}
+  90:	ee cf       	rjmp	.-36     	; 0x6e <main+0x24>
+
+00000092 <_exit>:
+  92:	f8 94       	cli
+
+00000094 <__stop_program>:
+  94:	ff cf       	rjmp	.-2      	; 0x94 <__stop_program>
