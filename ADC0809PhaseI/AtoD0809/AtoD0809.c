@@ -44,7 +44,7 @@ void Hex2Ascii(unsigned char c1,unsigned char *c2,unsigned char *c3)
 
 int main(void)
 {
-	Setup();
+	void Setup();
 	unsigned char x = 0;
 	unsigned char c2 = 0;
 	unsigned char c3 = 0;
@@ -83,16 +83,15 @@ int main(void)
 		ptr = (unsigned char*)EXTPortB;
 		//(*ptr2) = 0x00;
 		x = (*ptr);
-		Hex2Ascii(x, &c2, &c3);
-		USART_TX(c2);
-		USART_TX(c3);
+		//Hex2Ascii(x, &c2, &c3);
+		//USART_TX(c2);
+		//USART_TX(c3);
 		ptr = (unsigned char *)EXTPortA;
 		(*ptr) = ~x;
 		//delay_ms(300);
 		//(*ptr2) = 0xF0;
 		
-		PORTB = PORTB&(~(1<<OE))
-			;
+		PORTB = PORTB&(~(1<<OE));
 	
 		//while(1)
 		//;
